@@ -24,7 +24,7 @@ terraform {
 }
 
 module "produto" {
-  source                  = "git@github.com:gomex/terraform-module?ref=v0.1"
+  source                  = "https://github.com/EzzioMoreira/terraform-module?ref=v0.1"
   name                    = "produto"
 }
 
