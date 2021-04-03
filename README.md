@@ -32,8 +32,8 @@ output "ip_address" {
   value = module.produto.ip_address
 }
 ```
-
-Crie seu arquivo **.env** a partir do exemplo **.env.example**
+## Enviroment
+- Crie seu arquivo **.env** a partir do exemplo **.env.example**
 
 ## Inputs
 
