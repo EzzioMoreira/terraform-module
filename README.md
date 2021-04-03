@@ -1,7 +1,48 @@
-# Curso Infra-as-Code Linux Tips
-- Aula terraform Meta-Argument for_each. for no instance_type e for output com for in para instance.tag + ip address.
-- docker run -it -v $PWD:/app -w /app --entrypoint "" hashicorp/terraform:light sh
+## Terraform Module
+- Cria instância EC2 AWS.
 
+## Dependências
+- terraform >= 0.14
+- make
+- docker
+
+## Usando modulo
+Crie um arquivo **terrafile.tf** na raiz do seu projeto, você pode seguir esse exemplo:
+```terraform
+provider "aws" {
+  region  = "us-east-1"
+  version = "~> 2.0"
+}
+
+terraform {
+  backend "s3" {
+    # Lembre de trocar o bucket para o seu
+    bucket = "iaasweek-tfstates-terraform"
+    key    = "terraform-test.tfstate"
+    region = "us-east-1"
+  }
+}
+
+module "produto" {
+  source                  = "git@github.com:gomex/terraform-module?ref=v0.1"
+  name                    = "produto"
+}
+
+output "ip_address" {
+  value = module.produto.ip_address
+}
+```
+
+Crie seu arquivo **.env** a partir do exemplo **.env.example**
+
+## Inputs
+
+| **Nome** | **Descrição** | **Tipo** | **Default** | **Requerido** |
+|------|-------------|:----:|:-----:|:-----:|
+| **name** |  Nome do projeto | string | n/a | sim |
+| **hash\_commit** | Hash commit da imagem AMI | string | sim | não |
+
+## Entendendo Makefile
 ## Makefile
 - $$variable O $$ pega variavel de ambiente e $(variable) pega variavel definida no makefile.
 
@@ -13,8 +54,3 @@
 - -e AWS_ACCESS_KEY_ID=$$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$$AWS_SECRET_ACCESS_KEY -e TF_VAR_APP_VERSION=$(GIT_COMMIT) # variaveis
 - --entrypoint "" # para usar o ssh do container é preciso zerar o entrypoint "" 
 - hashicorp/terraform:$(TERRAFORM_VERSION) init -upgrade=true # imagem do container:versão e comando
-
-## Comandos básicos
-- terraform init -upgrade # verifica cód., sintaxe dos arquivos. 
-- terraform plan -out plano # cria infra e garda em arquivo. 
-- terraform apply "plano" # aplica terraform na aws.
