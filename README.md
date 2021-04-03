@@ -11,20 +11,20 @@ Crie um arquivo **terrafile.tf** na raiz do seu projeto, você pode seguir esse 
 ```terraform
 provider "aws" {
   region  = "us-east-1"
-  version = "~> 2.0"
+  version = "~> 3.0"
 }
 
 terraform {
   backend "s3" {
     # Lembre de trocar o bucket para o seu
-    bucket = "iaasweek-tfstates-terraform"
-    key    = "terraform-test.tfstate"
+    bucket = "terraform-ezzio"
+    key    = "terraform-labapp.tfstate"
     region = "us-east-1"
   }
 }
 
 module "produto" {
-  source                  = "git@github.com:gomex/terraform-module?ref=v0.1"
+  source                  = "git@github.com:EzzioMoreira/terraform-module.git?ref=v0.1"
   name                    = "produto"
 }
 
