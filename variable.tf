@@ -25,7 +25,6 @@ variable "tag_name" {
 
 # Variavel EBS
 variable "blocks" {
-  default = false
   type = list(object(
     {
       device_name = string
