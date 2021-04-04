@@ -34,6 +34,7 @@ output "ip_address" {
 ```
 ## Enviroment
 - Crie seu arquivo **.env** a partir do exemplo **.env.example**
+- Execute comando para adicionar github.com nos knows host: ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
 
 ## Inputs
 
