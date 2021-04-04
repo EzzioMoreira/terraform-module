@@ -1,3 +1,9 @@
+variable "owners_ami" {
+  description = "Id owner conta aws."
+  type = number
+  default = 099720109477
+}
+
 variable "environment" {
   default = "production"
 }
