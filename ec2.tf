@@ -1,35 +1,28 @@
-data "aws_ami" "ubuntu" {
+data "aws_ami" "my-ami" {
   most_recent = true
 
   filter {
     name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server*"]
+    values = [var.ami_name]
   }
 
-  owners = [var.owners_ami] # ID conta AWS Ubuntu
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  owners = [var.owners_ami]
 }
 
-resource "aws_instance" "web" {
-  ami           = data.aws_ami.ubuntu.id
-  for_each      = toset(var.instance_type)
-  instance_type = each.value
+resource "aws_instance" "devops-test" {
+  count                       = var.count-instance
+  ami                         = data.aws_ami.my-ami.id
+  instance_type               = var.instance_type
+  key_name                    = "devops-test"
+  subnet_id                   = element(aws_subnet.public.*.id, count.index)
+  associate_public_ip_address = true
 
-dynamic "ebs_block_device" {
-  for_each = var.blocks
-  content {
-    device_name = ebs_block_device.value["device_name"]
-    volume_size = ebs_block_device.value["volume_size"]
-    volume_type = ebs_block_device.value["volume_type"]
-  }
-}
-  volume_tags = {
-    Name    = "WEB ${each.value}"
-    Tipo    = "Homologacao"
-    Sistema = "Teste"
-}
-  tags = {
-    Name    = "WEB ${each.value}"
-    Tipo    = "Homologacao"
-    Sistema = "Teste"
-  }
+  vpc_security_group_ids = [aws_security_group.devops-test.id]
+
+  tags = var.default_tags
 }

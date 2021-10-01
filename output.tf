@@ -1,17 +1,19 @@
-#output "instance_id" {
-#  description = "ID and of the EC2 instance"
-#  value       = "${aws_instance.web.*.id}"
-#}
+output "rapadura-id" {
+  description = "The id of instance"
+  value       = [aws_instance.devops-test.*.id]
+}
 
-#output "instance_public_ip" {
-#  description = "Public IP address of the EC2 instance"
-#  value       = "${aws_instance.web.*.public_ip}"
-#}
+output "rapadura-public_dns" {
+  description = "The public dns of instance"
+  value       = [aws_instance.devops-test.*.public_dns]
+}
 
-output "ip_address-dns_name" {
-  description = "For output ip and dns of the EC2 instance"
-  value = {
-    for instance in aws_instance.web:
-    instance.tags.Name => [instance.public_ip, instance.public_dns]
-  } 
+output "rapadura-public_ip" {
+  description = "The public ip of instance"
+  value       = [aws_instance.devops-test.*.public_ip]
+}
+
+output "rapadura-private_ip" {
+  description = "The private ip of instance"
+  value       = [aws_instance.devops-test.*.private_ip]
 }
